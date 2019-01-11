@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace API
 {
@@ -30,6 +31,11 @@ namespace API
             var connection = @"Server=(localdb)\mssqllocaldb;Database=AirportsDb;Trusted_Connection=True";
             services.AddDbContext<AirportsDataFactory>(options => options.UseSqlServer(connection));
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Airports API", Version = "v1" });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -44,6 +50,12 @@ namespace API
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1.json", "Airports API V1");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
