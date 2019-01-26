@@ -21,9 +21,20 @@ namespace WebApp.Controllers
             return client;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var client = GetClient();
+            HttpResponseMessage response = await client.GetAsync($@"api/flights");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var model = await response.Content.ReadAsAsync<List<FlightProxy>>();
+                return View(model);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IActionResult About()
