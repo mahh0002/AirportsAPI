@@ -10,6 +10,8 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        public const string API = "https://localhost:44327";
+
         public IActionResult Index()
         {
             return View();
